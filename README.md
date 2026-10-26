@@ -5,10 +5,10 @@ Edit `index.html` and push; GitHub Pages serves the repo root.
 
 ## Files
 
-- `index.html` — the page, styles inline. Colours and fonts are copied from the FluentStrides
-  tokens (`fluentstrides/packages/tokens`), not imported, so the two repos change independently.
-- `favicon.svg` — the "W" mark, real vector paths.
-- `assets/fluentstrides.png` — FluentStrides icon, copied from `fluentstrides/apps/web/public/favicon-96.png`.
+- `index.html` — the page, styles inline. Black and white on purpose: the company has its own look,
+  separate from FluentStrides. Inter Tight from Google Fonts; the WEBSTRIDES wordmark is hand-drawn
+  SVG strokes in the page (each letter a `<path>` on a 100-unit-tall grid, stroke 20).
+- `favicon.svg` — the "W" from the wordmark, real vector paths.
 - `CNAME` — tells GitHub Pages the custom domain.
 - `.nojekyll` — serve files as they are.
 

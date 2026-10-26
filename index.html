@@ -4,200 +4,298 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WebStrides LLC</title>
-  <meta name="description" content="WebStrides LLC builds tools that make learning languages easier, including FluentStrides.">
+  <meta name="description" content="WebStrides LLC is an independent software company. FluentStrides is its first product.">
+  <meta name="theme-color" content="#000000">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>
+    // Hide reveal targets only when JS runs and motion is welcome, so the page
+    // is fully readable without either.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-on');
+  </script>
   <style>
-    /* Values copied from the FluentStrides tokens (palette.ts, primitives.ts)
-       so the company and its first product read as one family. */
     :root {
-      --bg: #F8FAFC;
-      --surface: #FFFFFF;
-      --border: #E2E6EE;
-      --text: #171B22;
-      --muted: #585F6D;
-      --brand: #2C6CEC;
-      --brand-ink: #235BC9;
-      --brand-soft: #ECF3FF;
-      color-scheme: light;
+      --bg: #000000;
+      --fg: #E8E8E1;
+      --muted: #8B8B84;
+      --line: rgba(232, 232, 225, 0.22);
+      --gutter: 24px;
+      color-scheme: dark;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0F1117;
-        --surface: #171B22;
-        --border: #2A2F3A;
-        --text: #F0F2F7;
-        --muted: #A4ABBA;
-        --brand: #5189FA;
-        --brand-ink: #82ABFF;
-        --brand-soft: #162D5B;
-        color-scheme: dark;
-      }
-    }
+    @media (min-width: 900px) { :root { --gutter: 120px; } }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; }
     body {
       background: var(--bg);
-      color: var(--text);
-      font-family: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      color: var(--fg);
+      font-family: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-weight: 400;
       font-size: 16px;
       line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
-    .wrap {
-      width: 100%;
-      max-width: 768px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-    @media (min-width: 640px) { .wrap { padding: 0 24px; } }
+    a { color: inherit; }
+    a:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
+    ::selection { background: var(--fg); color: var(--bg); }
 
-    header { padding: 24px 0; }
-    .wordmark {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Baloo 2', system-ui, sans-serif;
-      font-weight: 800;
-      font-size: 22px;
-      line-height: 1;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .wordmark img { width: 32px; height: 32px; }
-
-    main { flex: 1; }
-    .hero { padding: 48px 0 40px; }
-    h1, h2 {
-      font-family: 'Baloo 2', system-ui, sans-serif;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.4px;
-      margin: 0;
-    }
-    h1 { font-size: 48px; }
-    @media (min-width: 640px) { h1 { font-size: 64px; } }
-    .lead {
-      margin: 16px 0 0;
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 36em;
-    }
-    @media (min-width: 640px) { .lead { font-size: 22px; } }
-
-    section { padding: 24px 0; }
-    h2 {
-      font-size: 14px;
-      font-family: 'Nunito Sans', system-ui, sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.4px;
+    .label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 12px;
     }
 
-    .product {
+    /* Nav */
+    nav {
+      position: absolute;
+      inset: 0 0 auto 0;
+      z-index: 10;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      color: inherit;
-      text-decoration: none;
-      transition: border-color 140ms cubic-bezier(0.2, 0, 0, 1), transform 140ms cubic-bezier(0.2, 0, 0, 1);
+      padding: 24px var(--gutter);
     }
-    @media (min-width: 640px) { .product { padding: 24px; gap: 24px; } }
-    .product:hover { border-color: var(--brand); }
-    @media (prefers-reduced-motion: no-preference) {
-      .product:hover { transform: translateY(-2px); }
-    }
-    .product:focus-visible, a:focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 3px;
-    }
-    .product img {
-      flex: none;
-      width: 56px;
-      height: 56px;
-      padding: 8px;
-      background: var(--brand-soft);
-      border-radius: 16px;
-    }
-    .product-name {
-      display: block;
-      font-family: 'Baloo 2', system-ui, sans-serif;
-      font-weight: 800;
-      font-size: 22px;
-      line-height: 1.25;
-    }
-    .product-desc { display: block; color: var(--muted); }
-    .product-link {
-      display: block;
-      margin-top: 4px;
-      font-weight: 700;
-      color: var(--brand-ink);
+    nav ul { display: flex; gap: 32px; margin: 0; padding: 0; list-style: none; }
+    nav a { text-decoration: none; color: var(--fg); }
+    nav a:hover { color: #FFFFFF; }
+    @media (max-width: 560px) {
+      nav ul { gap: 20px; }
+      nav .est { display: none; }
     }
 
-    .contact a {
+    /* Hero: empty black, wordmark along the bottom */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 var(--gutter) 64px;
+    }
+    .wordmark { display: block; width: 100%; height: auto; }
+    .wordmark path { fill: none; stroke: var(--fg); stroke-width: 20; stroke-linecap: butt; stroke-linejoin: miter; }
+
+    /* Statement */
+    .statement {
+      position: relative;
+      padding: 30vh var(--gutter) 24vh;
+      text-align: center;
+    }
+    .statement h1 {
+      max-width: 15em;
+      margin: 0 auto;
+      font-size: clamp(28px, 4.2vw, 56px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+    .statement p {
+      max-width: 30em;
+      margin: 32px auto 0;
+      color: var(--muted);
       font-size: 18px;
-      font-weight: 700;
-      color: var(--brand-ink);
+      line-height: 1.45;
+    }
+
+    /* Crosshair registration marks */
+    .cross {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      pointer-events: none;
+    }
+    .cross::before, .cross::after {
+      content: '';
+      position: absolute;
+      background: var(--line);
+    }
+    .cross::before { left: 50%; top: 0; width: 1px; height: 100%; }
+    .cross::after { top: 50%; left: 0; height: 1px; width: 100%; }
+    .cross.l { left: var(--gutter); top: 50%; }
+    .cross.r { right: var(--gutter); top: 50%; }
+    @media (max-width: 900px) { .cross { width: 48px; height: 48px; } .cross.l, .cross.r { top: 18vh; } }
+
+    /* Products, inside a faint orbit */
+    .products {
+      position: relative;
+      padding: 24vh var(--gutter) 20vh;
+      overflow: hidden;
+    }
+    .orbit {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: max(1200px, 100vw);
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      /* Dissolve the circle as it falls, rather than cut it at the section's edge. */
+      -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 20%, transparent 45%);
+      mask-image: linear-gradient(to bottom, #000 0, #000 20%, transparent 45%);
+    }
+    #products-label { position: relative; text-align: center; margin: 0 0 64px; }
+    .product {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 40px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      text-decoration: none;
+    }
+    @media (min-width: 760px) {
+      .product { grid-template-columns: 72px 1fr auto; align-items: baseline; gap: 32px; }
+    }
+    .product .num { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .product h2 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+    .product .desc { margin: 12px 0 0; max-width: 30em; color: var(--muted); }
+    .product .go {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .product .go svg { width: 14px; height: 14px; transition: transform 220ms cubic-bezier(0.2, 0, 0, 1); }
+    .product:hover .go svg { transform: translate(3px, -3px); }
+    .product:hover h2 { color: #FFFFFF; }
+
+    /* Contact */
+    .contact {
+      padding: 20vh var(--gutter) 24vh;
+      text-align: center;
+    }
+    .contact p { margin: 0 0 24px; color: var(--muted); font-size: 18px; }
+    .contact a {
+      font-size: clamp(28px, 6vw, 80px);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
       text-decoration: none;
       overflow-wrap: anywhere;
+      background: linear-gradient(var(--fg), var(--fg)) 0 100% / 0 1px no-repeat;
+      transition: background-size 360ms cubic-bezier(0.2, 0, 0, 1);
     }
-    .contact a:hover { text-decoration: underline; }
+    .contact a:hover { background-size: 100% 1px; }
 
     footer {
-      margin-top: 48px;
-      padding: 24px 0 32px;
-      border-top: 1px solid var(--border);
-      font-size: 14px;
-      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 24px;
+      padding: 24px var(--gutter) 32px;
+      border-top: 1px solid var(--line);
     }
+
+    /* Scroll reveal */
+    @media (max-width: 760px) {
+      .statement { padding: 22vh var(--gutter) 16vh; }
+      .products { padding: 16vh var(--gutter) 10vh; }
+      .contact { padding: 12vh var(--gutter) 16vh; }
+    }
+
+    .reveal-on [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 900ms cubic-bezier(0.2, 0, 0, 1), transform 900ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .reveal-on [data-reveal].in { opacity: 1; transform: none; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <a class="wordmark" href="/"><img src="favicon.svg" alt="">WebStrides</a>
-    </div>
+  <nav class="label" aria-label="Main">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <span class="est">Est. 2026</span>
+  </nav>
+
+  <header class="hero">
+    <svg class="wordmark" viewBox="0 0 932 100" role="img" aria-label="WebStrides">
+      <title>WebStrides</title>
+      <!-- W -->
+      <path d="M10 0 V65 A25 25 0 0 0 35 90 H75 A25 25 0 0 0 100 65 V0 M55 30 V90"/>
+      <!-- E -->
+      <path transform="translate(128 0)" d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/>
+      <!-- B -->
+      <path transform="translate(226 0)" d="M10 0 V100 M0 10 H50 A20 20 0 0 1 50 50 H10 M10 50 H50 A20 20 0 0 1 50 90 H0"/>
+      <!-- S -->
+      <path transform="translate(324 0)" d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/>
+      <!-- T -->
+      <path transform="translate(422 0)" d="M0 10 H80 M40 10 V100"/>
+      <!-- R -->
+      <path transform="translate(520 0)" d="M10 100 V10 H50 A20 20 0 0 1 50 50 H10 M50 50 A20 20 0 0 1 70 70 V100"/>
+      <!-- I -->
+      <path transform="translate(618 0)" d="M10 0 V100"/>
+      <!-- D -->
+      <path transform="translate(656 0)" d="M10 0 V100 M0 10 H45 A25 25 0 0 1 70 35 V65 A25 25 0 0 1 45 90 H0"/>
+      <!-- E -->
+      <path transform="translate(754 0)" d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/>
+      <!-- S (narrow, last) -->
+      <path transform="translate(852 0)" d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/>
+    </svg>
   </header>
 
   <main>
-    <div class="wrap">
-      <div class="hero">
-        <h1>WebStrides LLC</h1>
-        <p class="lead">WebStrides builds tools that make learning languages easier.</p>
-      </div>
+    <section class="statement" id="about">
+      <span class="cross l" aria-hidden="true"></span>
+      <span class="cross r" aria-hidden="true"></span>
+      <h1 data-reveal>Software for learning languages the way you learned your first one.</h1>
+      <p data-reveal>WebStrides is an independent software company. We make focused tools that respect your time, and FluentStrides is the first.</p>
+    </section>
 
-      <section aria-labelledby="products">
-        <h2 id="products">Products</h2>
-        <a class="product" href="https://fluentstrides.app">
-          <img src="assets/fluentstrides.png" alt="" width="56" height="56">
-          <span>
-            <span class="product-name">FluentStrides</span>
-            <span class="product-desc">Watch real videos at exactly your level and pick up a language by understanding people talk.</span>
-            <span class="product-link">fluentstrides.app &rarr;</span>
-          </span>
-        </a>
-      </section>
+    <section class="products" id="products" aria-labelledby="products-label">
+      <div class="orbit" aria-hidden="true"></div>
+      <p class="label" id="products-label" data-reveal>Products</p>
+      <a class="product" href="https://fluentstrides.app" data-reveal>
+        <span class="num">001</span>
+        <span>
+          <h2>FluentStrides</h2>
+          <p class="desc">Watch real videos at exactly your level and pick up a language by understanding people talk.</p>
+        </span>
+        <span class="go label">fluentstrides.app
+          <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 L11 3 M4 3 H11 V10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+        </span>
+      </a>
+    </section>
 
-      <section class="contact" aria-labelledby="contact">
-        <h2 id="contact">Contact</h2>
-        <a href="mailto:hello@webstrides.com">hello@webstrides.com</a>
-      </section>
-    </div>
+    <section class="contact" id="contact">
+      <p data-reveal>Questions, partnerships or press</p>
+      <a href="mailto:hello@webstrides.com" data-reveal>hello@webstrides.com</a>
+    </section>
   </main>
 
-  <footer>
-    <div class="wrap">&copy; 2026 WebStrides LLC &middot; Wyoming, USA</div>
+  <footer class="label">
+    <span>&copy; 2026 WebStrides LLC</span>
+    <span>Wyoming, USA</span>
   </footer>
+
+  <script>
+    if (document.documentElement.classList.contains('reveal-on') && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -10% 0px' });
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    } else {
+      document.documentElement.classList.remove('reveal-on');
+    }
+  </script>
 </body>
 </html>
