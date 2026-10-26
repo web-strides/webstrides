@@ -105,8 +105,9 @@
     .wordmark { display: block; width: 100%; height: auto; }
     .wordmark { overflow: visible; }
     .wordmark path { fill: none; stroke: var(--fg); stroke-width: 20; stroke-linecap: butt; stroke-linejoin: miter; }
-    /* Undrawn until Motion draws it in (the head script sets draw-on). */
-    .draw-on .wordmark path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    /* Undrawn until Motion draws it in (the head script sets draw-on). The gap is 2, not 1:
+       curved paths render a hair longer than pathLength, and a gap of 1 let the next dash peek out. */
+    .draw-on .wordmark path { stroke-dasharray: 1 2; stroke-dashoffset: 1; }
 
     /* Statement */
     .statement {
@@ -294,13 +295,13 @@
         <path pathLength="1" vector-effect="non-scaling-stroke" d="M500 0.5 A499.5 499.5 0 0 1 500 999.5"/>
       </svg>
       <p class="label" id="products-label" data-reveal>Products</p>
-      <a class="product" href="https://fluentstrides.app" data-reveal>
+      <a class="product" href="https://fluentstrides.com" data-reveal>
         <span class="num">001</span>
         <span>
           <h2>FluentStrides</h2>
           <p class="desc">Watch real videos at exactly your level and pick up a language by understanding people talk.</p>
         </span>
-        <span class="go label">fluentstrides.app
+        <span class="go label">fluentstrides.com
           <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11 L11 3 M4 3 H11 V10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
         </span>
       </a>
@@ -330,17 +331,25 @@
       // Motion animates SVG strokes as attributes, which the draw-on CSS rule
       // would override, so hand the undrawn state over to attributes first.
       for (const p of letters) {
-        p.setAttribute('stroke-dasharray', '1');
+        p.setAttribute('stroke-dasharray', '1 2');
         p.setAttribute('stroke-dashoffset', '1');
       }
       root.classList.remove('draw-on');
+
+      // Drawn strokes no longer need the dash; dropping it leaves no rounding at the ends.
+      const undash = (paths) => () => {
+        for (const p of paths) {
+          p.removeAttribute('stroke-dasharray');
+          p.removeAttribute('stroke-dashoffset');
+        }
+      };
 
       // Draw each stroke in, left to right, a beat apart.
       animate(letters, { strokeDashoffset: [1, 0] }, {
         duration: 1.6,
         delay: stagger(0.08, { startDelay: 0.2 }),
         ease: [0.65, 0, 0.35, 1],
-      });
+      }).then(undash(letters));
 
       // Links fade in as the last letter is most of the way drawn.
       animate('nav', { opacity: [0, 1] }, { delay: 1.7, duration: 0.8 })
@@ -349,12 +358,13 @@
       // The orbit traces itself from the top when Products comes into view.
       const halves = [...document.querySelectorAll('.orbit path')];
       for (const p of halves) {
-        p.setAttribute('stroke-dasharray', '1');
+        p.setAttribute('stroke-dasharray', '1 2');
         p.setAttribute('stroke-dashoffset', '1');
       }
       // Wait until its top is a third of the way up the screen, or it finishes unseen.
       inView('.products', () => {
-        animate(halves, { strokeDashoffset: [1, 0] }, { duration: 2.4, ease: [0.65, 0, 0.35, 1] });
+        animate(halves, { strokeDashoffset: [1, 0] }, { duration: 2.4, ease: [0.65, 0, 0.35, 1] })
+          .then(undash(halves));
       }, { margin: '0px 0px -35% 0px' });
 
       // Crosshairs grow out from their centres: uprights, then crossbars.
