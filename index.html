@@ -6,10 +6,24 @@
   <title>WebStrides LLC</title>
   <meta name="description" content="WebStrides LLC is an independent software company that designs, builds and runs its own products for the web and mobile.">
   <meta name="theme-color" content="#000000">
+  <link rel="canonical" href="https://webstrides.com/">
+  <!-- Link previews (iMessage, Slack, LinkedIn, email) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://webstrides.com/">
+  <meta property="og:site_name" content="WebStrides">
+  <meta property="og:title" content="WebStrides LLC">
+  <meta property="og:description" content="Independent software, built with care.">
+  <meta property="og:image" content="https://webstrides.com/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The WebStrides wordmark on black.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Font and Motion are served from this site, so visits make no third-party requests. -->
+  <link rel="preload" href="fonts/InterTight-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="vendor/motion.js" defer></script>
   <script>
     // Hide reveal targets only when JS runs and motion is welcome, so the page
     // is fully readable without either.
@@ -20,6 +34,14 @@
     }
   </script>
   <style>
+    /* Inter Tight (SIL OFL 1.1, fonts/OFL.txt): one variable file, all weights. */
+    @font-face {
+      font-family: 'Inter Tight';
+      font-style: normal;
+      font-weight: 300 500;
+      font-display: swap;
+      src: url(fonts/InterTight-latin.woff2) format('woff2');
+    }
     :root {
       --bg: #000000;
       --fg: #E8E8E1;
@@ -296,10 +318,12 @@
   </footer>
 
   <script type="module">
-    import { animate, inView, scroll, stagger } from 'https://cdn.jsdelivr.net/npm/motion@12.43.0/+esm';
+    // vendor/motion.js is Motion 12.43.0's standalone build (MIT, vendor/MOTION-LICENSE.md);
+    // it's deferred, so it has run before this module does.
+    const { animate, inView, scroll, stagger } = window.Motion ?? {};
 
     const root = document.documentElement;
-    if (root.classList.contains('draw-on')) {
+    if (animate && root.classList.contains('draw-on')) {
       const letters = [...document.querySelectorAll('.wordmark path')];
       window.__wordmarkDrawn = true;
 

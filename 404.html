@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found · WebStrides LLC</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#000000">
+  <!-- Absolute paths: GitHub Pages serves this file at whatever URL was missing. -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/InterTight-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'Inter Tight';
+      font-style: normal;
+      font-weight: 300 500;
+      font-display: swap;
+      src: url(/fonts/InterTight-latin.woff2) format('woff2');
+    }
+    :root {
+      --bg: #000000;
+      --fg: #E8E8E1;
+      --muted: #8B8B84;
+      --line: rgba(232, 232, 225, 0.22);
+      --gutter: 24px;
+      color-scheme: dark;
+    }
+    @media (min-width: 900px) { :root { --gutter: 120px; } }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    a:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
+
+    .label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    header { padding: 24px var(--gutter); }
+    .wordmark { display: block; width: 160px; height: auto; }
+    .wordmark path { fill: none; stroke: var(--fg); stroke-width: 20; stroke-linecap: butt; stroke-linejoin: miter; }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      padding: 0 var(--gutter);
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4.2vw, 56px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+    main a {
+      text-decoration: none;
+      background: linear-gradient(var(--muted), var(--muted)) 0 100% / 100% 1px no-repeat;
+      padding-bottom: 4px;
+    }
+    main a:hover { color: var(--fg); }
+
+    footer {
+      padding: 24px var(--gutter) 32px;
+      border-top: 1px solid var(--line);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" aria-label="WebStrides home">
+      <svg class="wordmark" viewBox="0 0 932 100" aria-hidden="true">
+        <g><path d="M10 0 V65 A25 25 0 0 0 35 90 H75 A25 25 0 0 0 100 65 V0 M55 30 V90"/></g>
+        <g transform="translate(128 0)"><path d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/></g>
+        <g transform="translate(226 0)"><path d="M10 0 V100 M0 10 H50 A20 20 0 0 1 50 50 H10 M10 50 H50 A20 20 0 0 1 50 90 H0"/></g>
+        <g transform="translate(324 0)"><path d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/></g>
+        <g transform="translate(422 0)"><path d="M0 10 H80 M40 10 V100"/></g>
+        <g transform="translate(520 0)"><path d="M10 100 V10 H50 A20 20 0 0 1 50 50 H10 M50 50 A20 20 0 0 1 70 70 V100"/></g>
+        <g transform="translate(618 0)"><path d="M10 0 V100"/></g>
+        <g transform="translate(656 0)"><path d="M10 0 V100 M0 10 H45 A25 25 0 0 1 70 35 V65 A25 25 0 0 1 45 90 H0"/></g>
+        <g transform="translate(754 0)"><path d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/></g>
+        <g transform="translate(852 0)"><path d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/></g>
+      </svg>
+    </a>
+  </header>
+
+  <main>
+    <p class="label">404</p>
+    <h1>This page doesn't exist.</h1>
+    <a class="label" href="/">Back to WebStrides</a>
+  </main>
+
+  <footer class="label">&copy; 2026 WebStrides LLC</footer>
+</body>
+</html>

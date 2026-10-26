@@ -6,14 +6,31 @@ Edit `index.html` and push; GitHub Pages serves the repo root.
 ## Files
 
 - `index.html` — the page, styles inline. Black and white on purpose: the company has its own look,
-  separate from FluentStrides. Inter Tight from Google Fonts; the WEBSTRIDES wordmark is hand-drawn
-  SVG strokes in the page (each letter a `<path>` on a 100-unit-tall grid, stroke 20).
-  [Motion](https://motion.dev) 12.43.0, loaded from jsDelivr, draws the wordmark in on load and
-  pulls its letters apart on scroll. Reduced motion, or Motion failing to load within 3 s,
-  shows the wordmark as it is.
-- `favicon.svg` — the "W" from the wordmark, real vector paths.
+  separate from FluentStrides. The WEBSTRIDES wordmark is hand-drawn SVG strokes in the page (each
+  letter a `<path>` on a 100-unit-tall grid, stroke 20). Motion draws it in on load, pulls its
+  letters apart on scroll, traces the circle and grows the crosshairs. Reduced motion, or Motion
+  failing to load within 3 s, shows everything as it is.
+- `404.html` — served by GitHub Pages for any unknown path. Uses absolute paths (`/fonts/…`) because
+  it can be served at any depth.
+- `fonts/InterTight-latin.woff2` — Inter Tight, one variable file covering weights 300–500, Latin
+  subset, from Google Fonts. Licence: `fonts/OFL.txt`.
+- `vendor/motion.js` — [Motion](https://motion.dev) 12.43.0's standalone build (`dist/motion.js` from
+  the npm package), exposing `window.Motion`. Licence: `vendor/MOTION-LICENSE.md`. To upgrade:
+  `npm pack motion@<version>`, copy `package/dist/motion.js` over it.
+- `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` — the "W" from the wordmark. iOS needs the
+  PNG; the touch icon is full-bleed because iOS rounds the corners itself.
+- `assets/og.png` — 1200×630 link-preview image (iMessage, Slack, LinkedIn, email).
 - `CNAME` — tells GitHub Pages the custom domain.
 - `.nojekyll` — serve files as they are.
+
+The font and Motion are served from this site, so a visit makes no requests to anyone else. Keep
+it that way; it's why the site needs no privacy notice.
+
+## Adding a product
+
+Copy the `<a class="product">` row under Products in `index.html`, change the number (`002`), name,
+description and link. The PNGs were rendered from HTML in headless Edge at their exact sizes; if
+the wordmark or tagline changes, re-render `assets/og.png` the same way.
 
 ## Deploy (GitHub Pages)
 
@@ -42,4 +59,3 @@ Edit `index.html` and push; GitHub Pages serves the repo root.
 ## Later
 
 - Link Privacy and Terms in the footer once FluentStrides has them.
-- Add each new product as another card under Products.
