@@ -14,9 +14,9 @@
     // Hide reveal targets only when JS runs and motion is welcome, so the page
     // is fully readable without either.
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.classList.add('reveal-on', 'draw-on');
-      // If Motion never loads, show the wordmark rather than leave it undrawn.
-      setTimeout(() => { if (!window.__wordmarkDrawn) document.documentElement.classList.remove('draw-on'); }, 3000);
+      document.documentElement.classList.add('reveal-on', 'draw-on', 'intro');
+      // If Motion never loads, show the wordmark and nav rather than leave them hidden.
+      setTimeout(() => { if (!window.__wordmarkDrawn) document.documentElement.classList.remove('draw-on', 'intro'); }, 3000);
     }
   </script>
   <style>
@@ -116,13 +116,12 @@
       height: 100px;
       pointer-events: none;
     }
-    .cross::before, .cross::after {
-      content: '';
+    .cross-v, .cross-h {
       position: absolute;
       background: var(--line);
     }
-    .cross::before { left: 50%; top: 0; width: 1px; height: 100%; }
-    .cross::after { top: 50%; left: 0; height: 1px; width: 100%; }
+    .cross-v { left: 50%; top: 0; width: 1px; height: 100%; }
+    .cross-h { top: 50%; left: 0; height: 1px; width: 100%; }
     .cross.l { left: var(--gutter); top: 50%; }
     .cross.r { right: var(--gutter); top: 50%; }
     @media (max-width: 900px) { .cross { width: 48px; height: 48px; } .cross.l, .cross.r { top: 18vh; } }
@@ -138,15 +137,19 @@
       left: 50%;
       top: 0;
       width: max(1200px, 100vw);
+      height: auto;
       aspect-ratio: 1;
-      border: 1px solid var(--line);
-      border-radius: 50%;
+      overflow: visible;
       transform: translateX(-50%);
       pointer-events: none;
       /* Dissolve the circle as it falls, rather than cut it at the section's edge. */
       -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 20%, transparent 45%);
       mask-image: linear-gradient(to bottom, #000 0, #000 20%, transparent 45%);
     }
+    .orbit path { fill: none; stroke: var(--line); stroke-width: 1; }
+
+    /* The links wait until the wordmark is nearly drawn (head script sets intro). */
+    .intro nav { opacity: 0; }
     #products-label { position: relative; text-align: center; margin: 0 0 64px; }
     .product {
       position: relative;
@@ -256,14 +259,18 @@
 
   <main>
     <section class="statement" id="about">
-      <span class="cross l" aria-hidden="true"></span>
-      <span class="cross r" aria-hidden="true"></span>
+      <span class="cross l" aria-hidden="true"><span class="cross-v"></span><span class="cross-h"></span></span>
+      <span class="cross r" aria-hidden="true"><span class="cross-v"></span><span class="cross-h"></span></span>
       <h1 data-reveal>Independent software, built with care.</h1>
       <p data-reveal>WebStrides is a small software company. We design, build and run our own products for the web and mobile.</p>
     </section>
 
     <section class="products" id="products" aria-labelledby="products-label">
-      <div class="orbit" aria-hidden="true"></div>
+      <!-- Two halves from the top point, so the circle opens both ways at once. -->
+      <svg class="orbit" viewBox="0 0 1000 1000" aria-hidden="true">
+        <path pathLength="1" vector-effect="non-scaling-stroke" d="M500 0.5 A499.5 499.5 0 0 0 500 999.5"/>
+        <path pathLength="1" vector-effect="non-scaling-stroke" d="M500 0.5 A499.5 499.5 0 0 1 500 999.5"/>
+      </svg>
       <p class="label" id="products-label" data-reveal>Products</p>
       <a class="product" href="https://fluentstrides.app" data-reveal>
         <span class="num">001</span>
@@ -289,7 +296,7 @@
   </footer>
 
   <script type="module">
-    import { animate, scroll, stagger } from 'https://cdn.jsdelivr.net/npm/motion@12.43.0/+esm';
+    import { animate, inView, scroll, stagger } from 'https://cdn.jsdelivr.net/npm/motion@12.43.0/+esm';
 
     const root = document.documentElement;
     if (root.classList.contains('draw-on')) {
@@ -310,6 +317,31 @@
         delay: stagger(0.08, { startDelay: 0.2 }),
         ease: [0.65, 0, 0.35, 1],
       });
+
+      // Links fade in as the last letter is most of the way drawn.
+      animate('nav', { opacity: [0, 1] }, { delay: 1.7, duration: 0.8 })
+        .then(() => root.classList.remove('intro'));
+
+      // The orbit traces itself from the top when Products comes into view.
+      const halves = [...document.querySelectorAll('.orbit path')];
+      for (const p of halves) {
+        p.setAttribute('stroke-dasharray', '1');
+        p.setAttribute('stroke-dashoffset', '1');
+      }
+      // Wait until its top is a third of the way up the screen, or it finishes unseen.
+      inView('.products', () => {
+        animate(halves, { strokeDashoffset: [1, 0] }, { duration: 2.4, ease: [0.65, 0, 0.35, 1] });
+      }, { margin: '0px 0px -35% 0px' });
+
+      // Crosshairs grow out from their centres: uprights, then crossbars.
+      const uprights = document.querySelectorAll('.cross-v');
+      const bars = document.querySelectorAll('.cross-h');
+      animate(uprights, { scaleY: 0 }, { duration: 0 });
+      animate(bars, { scaleX: 0 }, { duration: 0 });
+      inView('.cross', (cross) => {
+        animate(cross.querySelector('.cross-v'), { scaleY: [0, 1] }, { duration: 0.6, ease: [0.2, 0, 0, 1] });
+        animate(cross.querySelector('.cross-h'), { scaleX: [0, 1] }, { duration: 0.6, delay: 0.15, ease: [0.2, 0, 0, 1] });
+      }, { amount: 'all' });
 
       // As the first screen scrolls away, letters rise at slightly different
       // speeds and fade, so the word comes apart rather than sliding off whole.
