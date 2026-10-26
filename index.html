@@ -13,7 +13,11 @@
   <script>
     // Hide reveal targets only when JS runs and motion is welcome, so the page
     // is fully readable without either.
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('reveal-on');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('reveal-on', 'draw-on');
+      // If Motion never loads, show the wordmark rather than leave it undrawn.
+      setTimeout(() => { if (!window.__wordmarkDrawn) document.documentElement.classList.remove('draw-on'); }, 3000);
+    }
   </script>
   <style>
     :root {
@@ -77,7 +81,10 @@
       padding: 0 var(--gutter) 64px;
     }
     .wordmark { display: block; width: 100%; height: auto; }
+    .wordmark { overflow: visible; }
     .wordmark path { fill: none; stroke: var(--fg); stroke-width: 20; stroke-linecap: butt; stroke-linejoin: miter; }
+    /* Undrawn until Motion draws it in (the head script sets draw-on). */
+    .draw-on .wordmark path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 
     /* Statement */
     .statement {
@@ -231,26 +238,19 @@
   <header class="hero">
     <svg class="wordmark" viewBox="0 0 932 100" role="img" aria-label="WebStrides">
       <title>WebStrides</title>
-      <!-- W -->
-      <path d="M10 0 V65 A25 25 0 0 0 35 90 H75 A25 25 0 0 0 100 65 V0 M55 30 V90"/>
-      <!-- E -->
-      <path transform="translate(128 0)" d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/>
-      <!-- B -->
-      <path transform="translate(226 0)" d="M10 0 V100 M0 10 H50 A20 20 0 0 1 50 50 H10 M10 50 H50 A20 20 0 0 1 50 90 H0"/>
-      <!-- S -->
-      <path transform="translate(324 0)" d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/>
-      <!-- T -->
-      <path transform="translate(422 0)" d="M0 10 H80 M40 10 V100"/>
-      <!-- R -->
-      <path transform="translate(520 0)" d="M10 100 V10 H50 A20 20 0 0 1 50 50 H10 M50 50 A20 20 0 0 1 70 70 V100"/>
-      <!-- I -->
-      <path transform="translate(618 0)" d="M10 0 V100"/>
-      <!-- D -->
-      <path transform="translate(656 0)" d="M10 0 V100 M0 10 H45 A25 25 0 0 1 70 35 V65 A25 25 0 0 1 45 90 H0"/>
-      <!-- E -->
-      <path transform="translate(754 0)" d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/>
-      <!-- S (narrow, last) -->
-      <path transform="translate(852 0)" d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/>
+      <!-- Each letter: a <g> places it, its <path> is what animates (a CSS
+           transform on the path would override a transform attribute).
+           pathLength="1" lets one dash value draw any letter. -->
+      <g><path pathLength="1" d="M10 0 V65 A25 25 0 0 0 35 90 H75 A25 25 0 0 0 100 65 V0 M55 30 V90"/></g>
+      <g transform="translate(128 0)"><path pathLength="1" d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/></g>
+      <g transform="translate(226 0)"><path pathLength="1" d="M10 0 V100 M0 10 H50 A20 20 0 0 1 50 50 H10 M10 50 H50 A20 20 0 0 1 50 90 H0"/></g>
+      <g transform="translate(324 0)"><path pathLength="1" d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/></g>
+      <g transform="translate(422 0)"><path pathLength="1" d="M0 10 H80 M40 10 V100"/></g>
+      <g transform="translate(520 0)"><path pathLength="1" d="M10 100 V10 H50 A20 20 0 0 1 50 50 H10 M50 50 A20 20 0 0 1 70 70 V100"/></g>
+      <g transform="translate(618 0)"><path pathLength="1" d="M10 0 V100"/></g>
+      <g transform="translate(656 0)"><path pathLength="1" d="M10 0 V100 M0 10 H45 A25 25 0 0 1 70 35 V65 A25 25 0 0 1 45 90 H0"/></g>
+      <g transform="translate(754 0)"><path pathLength="1" d="M80 10 H35 A25 25 0 0 0 10 35 V65 A25 25 0 0 0 35 90 H80 M10 50 H70"/></g>
+      <g transform="translate(852 0)"><path pathLength="1" d="M80 10 H30 A20 20 0 0 0 30 50 H50 A20 20 0 0 1 50 90 H0"/></g>
     </svg>
   </header>
 
@@ -288,6 +288,43 @@
     <span>Wyoming, USA</span>
   </footer>
 
+  <script type="module">
+    import { animate, scroll, stagger } from 'https://cdn.jsdelivr.net/npm/motion@12.43.0/+esm';
+
+    const root = document.documentElement;
+    if (root.classList.contains('draw-on')) {
+      const letters = [...document.querySelectorAll('.wordmark path')];
+      window.__wordmarkDrawn = true;
+
+      // Motion animates SVG strokes as attributes, which the draw-on CSS rule
+      // would override, so hand the undrawn state over to attributes first.
+      for (const p of letters) {
+        p.setAttribute('stroke-dasharray', '1');
+        p.setAttribute('stroke-dashoffset', '1');
+      }
+      root.classList.remove('draw-on');
+
+      // Draw each stroke in, left to right, a beat apart.
+      animate(letters, { strokeDashoffset: [1, 0] }, {
+        duration: 1.6,
+        delay: stagger(0.08, { startDelay: 0.2 }),
+        ease: [0.65, 0, 0.35, 1],
+      });
+
+      // As the first screen scrolls away, letters rise at slightly different
+      // speeds and fade, so the word comes apart rather than sliding off whole.
+      // Progress is worked out here: Motion's target/offset gave 0.5 at the top.
+      const hero = document.querySelector('.hero');
+      const rises = letters.map((_, i) => 40 + ((i * 37) % 5) * 18);
+      scroll((_, info) => {
+        const p = Math.min(1, Math.max(0, info.y.current / hero.offsetHeight));
+        letters.forEach((letter, i) => {
+          letter.style.transform = p ? `translateY(${-rises[i] * p}px)` : '';
+          letter.style.opacity = p ? String(1 - p) : '';
+        });
+      });
+    }
+  </script>
   <script>
     if (document.documentElement.classList.contains('reveal-on') && 'IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {

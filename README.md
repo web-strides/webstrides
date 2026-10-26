@@ -8,6 +8,9 @@ Edit `index.html` and push; GitHub Pages serves the repo root.
 - `index.html` — the page, styles inline. Black and white on purpose: the company has its own look,
   separate from FluentStrides. Inter Tight from Google Fonts; the WEBSTRIDES wordmark is hand-drawn
   SVG strokes in the page (each letter a `<path>` on a 100-unit-tall grid, stroke 20).
+  [Motion](https://motion.dev) 12.43.0, loaded from jsDelivr, draws the wordmark in on load and
+  pulls its letters apart on scroll. Reduced motion, or Motion failing to load within 3 s,
+  shows the wordmark as it is.
 - `favicon.svg` — the "W" from the wordmark, real vector paths.
 - `CNAME` — tells GitHub Pages the custom domain.
 - `.nojekyll` — serve files as they are.
