@@ -26,7 +26,7 @@
   <script src="vendor/motion.js" defer></script>
   <script>
     // Hide reveal targets only when JS runs, so the page is fully readable without it.
-    // Reduced motion still animates, just without movement (see the CSS and module below).
+    // Reduced motion still animates; only the section slide-up is dropped (see the CSS below).
     document.documentElement.classList.add('reveal-on', 'draw-on', 'intro');
     // If Motion never loads, show the wordmark and nav rather than leave them hidden.
     setTimeout(() => { if (!window.__wordmarkDrawn) document.documentElement.classList.remove('draw-on', 'intro'); }, 3000);
@@ -382,14 +382,12 @@
       // As the first screen scrolls away, letters rise at slightly different
       // speeds and fade, so the word comes apart rather than sliding off whole.
       // Progress is worked out here: Motion's target/offset gave 0.5 at the top.
-      // Under reduced motion the letters only fade.
-      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const hero = document.querySelector('.hero');
       const rises = letters.map((_, i) => 40 + ((i * 37) % 5) * 18);
       scroll((_, info) => {
         const p = Math.min(1, Math.max(0, info.y.current / hero.offsetHeight));
         letters.forEach((letter, i) => {
-          letter.style.transform = p && !calm ? `translateY(${-rises[i] * p}px)` : '';
+          letter.style.transform = p ? `translateY(${-rises[i] * p}px)` : '';
           letter.style.opacity = p ? String(1 - p) : '';
         });
       });
